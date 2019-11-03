@@ -33,6 +33,12 @@ app.get('/category/detail',function(req,res){
   })
 })
 
+app.get('/category/topcategory',function(req,res){
+  db.query(`select * from category limit  ` + req.query.count ,function(err,result){
+    res.json(result.rows);
+  })
+})
+
 app.post('/category/add', [
   check('name').not().isEmpty(),
   check('description').isLength({ min: 3 })
