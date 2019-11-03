@@ -23,9 +23,15 @@ const db = new Pool({
 app.get('/category/list', function (req, res) {
   db.query(`select * from category`,(err,result)=>{
     res.json(result.rows);
-  
   })
 });
+
+
+app.get('/category/detail',function(req,res){
+  db.query(`select * from category where id = '` + req.query.id + `'`,function(err,result){
+    res.json(result.rows);
+  })
+})
 
 app.post('/category/add', [
   check('name').not().isEmpty(),
