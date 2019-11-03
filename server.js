@@ -20,8 +20,11 @@ const db = new Pool({
     ssl:conf.sql.ssl
 });
 
-app.get('/', function (req, res) {
-  res.json({ status: 'success', message: 'Book added.' })
+app.get('/category/list', function (req, res) {
+  db.query(`select * from category`,(err,result)=>{
+    res.json(result.rows);
+  
+  })
 });
 
 app.post('/category/add', [
@@ -38,15 +41,37 @@ app.post('/category/add', [
     var description = req.query.description;
     db.query(`INSERT INTO public.category(
       id, name, description, isdelete, addate)
-      VALUES ('`+ id +`','` + name +`','` + description + `',false, now());`,function(err){
+      VALUES ('`+ id +`','` + name +`','` + description + `',false, now());`,function(err,result){
     
         if(!err){
+          console.log(result);
           res.status(200).send("İşlem Başarılı!");
         }
         else{
           res.status(400).send("İşlem başarısız. Eksik parametre!")
         }
       })
+  }
+});
+
+app.post('/category/delete',[
+  check('id').not().isEmpty()
+],(req,res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+  else{
+    var id = req.query.id;
+    db.query(`update category set isdelete = true where id = '` + id + `'`,function(err){
+      if(err){
+        console.log(err);
+        res.status(400).send("İşlem hatalı!");
+      }  
+      else{
+        res.send("İşlem başarılı");
+      }
+    })
   }
 })
 
