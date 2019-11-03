@@ -27,10 +27,15 @@ app.get('/category/list', function (req, res) {
 });
 
 
-app.get('/category/detail',function(req,res){
-  db.query(`select * from category where id = '` + req.query.id + `'`,function(err,result){
+app.get('/category/detail/:id',function(req,res){
+  console.log(req.params);
+  db.query(`select * from category where id = '` + req.params.id + `'`,function(err,result){
     res.json(result.rows);
   })
+
+  // db.query(`select * from category where id = '` + req.query.id + `'`,function(err,result){
+  //   res.json(result.rows);
+  // })
 })
 
 app.get('/category/topcategory',function(req,res){
@@ -85,7 +90,7 @@ app.post('/category/delete',[
       }
     })
   }
-})
+});
 
   server.listen(3000, function () {
     console.log('listening on *:' + 3000);
