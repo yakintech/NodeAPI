@@ -4,6 +4,7 @@ var conf = require('./config');
 const bodyParser = require('body-parser');
 const uuidv1 = require('uuid/v1');
 const { check, validationResult } = require('express-validator');
+var _ = require('lodash');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -95,6 +96,26 @@ app.post('/category/delete',[
   server.listen(3000, function () {
     console.log('listening on *:' + 3000);
 });
+
+
+
+
+db.query(`select * from category`,(err,result)=>{
+  
+  var data = result.rows;
+  //gelen kategorilerden adı "çağatay" olan kategori var mı?
+  for(i = 0;i < data.length; i++){
+    if(data[i].name == "Elektronik"){
+    }
+  } 
+  // console.log(data);
+  // var x = _.remove(data, ['name', 'Elektronik']);
+  // console.log("--------------------------------------")
+  // console.log(data);
+  var sonuc = _.take(data,2);
+  console.log(sonuc);
+
+})
 
 
 
